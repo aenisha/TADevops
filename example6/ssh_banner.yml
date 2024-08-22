@@ -1,0 +1,29 @@
+---
+- name: Configure SSH Banner on Remote Hosts
+  hosts: all
+  become: yes
+
+  tasks:
+    - name: Copy SSH banner file
+      template:
+        src: ssh_banner.j2
+        dest: /etc/issue.net
+      notify:
+        - Restart sshd
+
+    - name: Ensure SSH configuration is updated to use the banner
+      lineinfile:
+        path: /etc/ssh/sshd_config
+        regexp: '^Banner '
+        line: 'Banner /etc/issue.net'
+        state: present
+      notify:
+        - Restart sshd
+
+  handlers:
+    - name: Restart sshd
+      service:
+        name: sshd
+        state: restarted
+        enabled: yes
+

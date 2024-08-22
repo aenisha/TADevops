@@ -1,0 +1,24 @@
+---
+- name: Add users to devops group
+  hosts: centos8
+  become: yes
+  vars:
+    users:
+      - student1
+      - student2
+      - student3
+      - student4
+  tasks:
+    - name: Ensure devops group exists
+      group:
+        name: devops
+        state: present
+
+    - name: Add users to devops group
+      user:
+        name: "{{ item }}"
+        groups: devops
+        append: yes
+        state: present
+      loop: "{{ users }}"
+

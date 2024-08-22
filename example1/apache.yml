@@ -1,0 +1,27 @@
+---
+- name: Install and configure Apache
+  hosts: centos8
+  become: yes
+
+  tasks:
+    - name: Install Apache
+      yum:
+        name: httpd
+        state: present
+    
+    - name: Install Git
+      yum:
+        name: git
+        state: present
+
+    - name: Start and enable Apache service
+      systemd:
+        name: httpd
+        enabled: yes
+        state: started
+
+    - name: Create index.html from a GitHub repository
+      git:
+        repo: 'https://github.com/srtimsina/devops-techaxis.git'
+        dest: /var/www/html/
+

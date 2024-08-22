@@ -1,0 +1,21 @@
+# /etc/chrony/chrony.conf
+
+# Use public servers from the pool.ntp.org project.
+# Please consider joining the pool (http://www.pool.ntp.org/join.html).
+{% for server in ntp_servers %}
+server {{ server }}
+{% endfor %}
+
+# Record the local clock as a reference.
+local stratum 10
+
+# Allow NTP client access from localhost
+allow 127.0.0.1
+allow 192.168.0.0/24
+
+# Specify the directory for chrony to store its data
+driftfile /var/lib/chrony/drift
+
+# Enable logging
+logdir /var/log/chrony
+

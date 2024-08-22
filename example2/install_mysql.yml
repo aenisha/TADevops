@@ -1,0 +1,28 @@
+---
+- name: Install MySQL and configure
+  hosts: centos8
+  become: yes
+  tasks:
+    - name: Install MySQL server
+      yum:
+        name: mysql-server
+        state: present
+
+    - name: Ensure MySQL service is started
+      service:
+        name: mysqld
+        state: started
+        enabled: yes
+
+    - name: Create database devopsdb
+      mysql_db:
+        name: devopsdb
+        state: present
+
+    - name: Create user devops with password
+      mysql_user:
+        name: devops
+        password: devops@123
+        priv: 'devopsdb.*:ALL'
+        state: present
+
