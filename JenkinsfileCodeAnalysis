@@ -20,12 +20,12 @@ pipeline {
         }
         stage('UNIT TEST') {
             steps {
-                sh 'mvn -f jenkins/java-tomcat-sample/pom.xml test'
+                sh 'mvn -f pom.xml test'
             }
         }
         stage('Checkstyle Analysis') {
             steps {
-                sh 'mvn -f jenkins/java-tomcat-sample/pom.xml checkstyle:checkstyle'
+                sh 'mvn -f pom.xml checkstyle:checkstyle'
             }
         }
         stage('Sonar Analysis') {
