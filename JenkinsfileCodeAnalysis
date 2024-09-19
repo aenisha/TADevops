@@ -44,19 +44,15 @@ pipeline {
         }
         stage('UploadArtifact') {
             steps {
-                script {
-                    def artifactVersion = "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}".replaceAll(' ', '_')
-
-                    echo "Artifact Version: ${artifactVersion}"
-                    
+                script {                    
                     nexusArtifactUploader(
                         nexusVersion: 'nexus3',
                         protocol: 'http',
-                        nexusUrl: 'http://192.168.33.12:8081', 
+                        nexusUrl: '192.168.33.12:8081', 
                         groupId: 'devops',
-                        version: artifactVersion,  // Use the updated version
+                        version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}"
                         repository: 'devops-ta-java-application',
-                        credentialsId: 'nexuslogin',
+                        credentialsId: 'nexus',
                         artifacts: [
                             [artifactId: 'java-tomcat-sample',
                              classifier: '',
