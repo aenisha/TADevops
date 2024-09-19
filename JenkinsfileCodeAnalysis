@@ -47,7 +47,7 @@ pipeline {
                 nexusArtifactUploader(
                     nexusVersion: 'nexus3',
                     protocol: 'http',
-                    nexusUrl: 'http://192.168.33.12:8081',
+                    nexusUrl: 'http://192.168.33.12:8081', // Fixed URL
                     groupId: 'devops',
                     version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
                     repository: 'devops-ta-java-application',
