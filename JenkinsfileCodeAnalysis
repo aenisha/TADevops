@@ -7,7 +7,7 @@ pipeline {
 
         stage('Build') {
             steps {
-                sh 'mvn -f jenkins/java-tomcat-sample/pom.xml install -DskipTests'
+                sh 'mvn -f pom.xml install -DskipTests'
             }
             post {
                 success {
