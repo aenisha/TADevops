@@ -18,6 +18,29 @@ pipeline {
                 }
             }
         }
+        stage('UNIT TEST') {
+            steps {
+                sh 'mvn -f jenkins/java-tomcat-sample/pom.xml test'
+            }
+        }
+        stage('Checkstyle Analysis') {
+            steps {
+                sh 'mvn -f jenkins/java-tomcat-sample/pom.xml checkstyle:checkstyle'
+            }
+        }
+        stage('Sonar Analysis') {
+            steps {
+                withSonarQubeEnv('sonar') {
+                    sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=java-tomcat-sample \
+                        -Dsonar.projectName=java-tomcat-sample \
+                        -Dsonar.projectVersion=4.0 \
+                        -Dsonar.sources=jenkins/java-tomcat-sample/src/ \
+                        -Dsonar.junit.reportsPath=target/surefire-reports/ \
+                        -Dsonar.jacoco.reportsPath=target/jacoco.exec \
+                        -Dsonar.java.checkstyle.reportPaths=target/checkstyle-result.xml'''
+                }
+            }
+        }
     }
 }
 
