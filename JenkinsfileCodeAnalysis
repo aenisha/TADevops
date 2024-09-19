@@ -28,11 +28,11 @@ pipeline {
                 sh 'mvn -f pom.xml checkstyle:checkstyle'
             }
         }
-        stage('Sonar Analysis') {
+     stage('Sonar Analysis') {
     steps {
-        withSonarQubeEnv('sonar6.1') {
-            sh 'which ${scannerHome}/bin/sonar-scanner || echo "SonarScanner not found at expected path"'
-            sh '''${scannerHome}/bin/sonar-scanner -Dsonar.projectKey=java-tomcat-sample \
+        withSonarQubeEnv('sonar6.1') { // Ensure 'sonar6.1' matches the SonarQube server configuration
+            sh 'if [ -x /opt/sonar-scanner/bin/sonar-scanner ]; then echo "SonarScanner found"; else echo "SonarScanner not found"; fi'
+            sh '''/opt/sonar-scanner/bin/sonar-scanner -Dsonar.projectKey=java-tomcat-sample \
                 -Dsonar.projectName=java-tomcat-sample \
                 -Dsonar.projectVersion=4.0 \
                 -Dsonar.sources=. \
@@ -42,6 +42,7 @@ pipeline {
         }
     }
 }
+
     }
 }
 
