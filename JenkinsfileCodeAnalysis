@@ -43,28 +43,29 @@ pipeline {
             }
         }
         stage('UploadArtifact') {
-    steps {
-        script {
-            def artifactVersion = "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}".replaceAll(' ', '_')
+            steps {
+                script {
+                    def artifactVersion = "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}".replaceAll(' ', '_')
+
+                    echo "Artifact Version: ${artifactVersion}"
+                    
+                    nexusArtifactUploader(
+                        nexusVersion: 'nexus3',
+                        protocol: 'http',
+                        nexusUrl: 'http://192.168.33.12:8081', 
+                        groupId: 'devops',
+                        version: artifactVersion,  // Use the updated version
+                        repository: 'devops-ta-java-application',
+                        credentialsId: 'nexuslogin',
+                        artifacts: [
+                            [artifactId: 'java-tomcat-sample',
+                             classifier: '',
+                             file: 'target/java-tomcat-maven-example.war',  // Path to the artifact file
+                             type: 'war']
+                        ]
+                    )
+                }
+            }
         }
-
-        nexusArtifactUploader(
-            nexusVersion: 'nexus3',
-            protocol: 'http',
-            nexusUrl: '192.168.33.12:8081', 
-            groupId: 'devops',
-            version: artifactVersion,  
-            repository: 'devops-ta-java-application',
-            credentialsId: 'nexuslogin',
-            artifacts: [
-                [artifactId: 'java-tomcat-sample',
-                 classifier: '',
-                 file: 'target/java-tomcat-maven-example.war',  // Path to the artifact file
-                 type: 'war']
-            ]
-        )
-    }
-}
-
     }
 }
