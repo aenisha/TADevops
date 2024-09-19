@@ -43,23 +43,28 @@ pipeline {
             }
         }
         stage('UploadArtifact') {
-            steps {
-                nexusArtifactUploader(
-                    nexusVersion: 'nexus3',
-                    protocol: 'http',
-                    nexusUrl: '192.168.33.12:8081', 
-                    groupId: 'devops',
-                    version: "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}",
-                    repository: 'devops-ta-java-application',
-                    credentialsId: 'nexuslogin',
-                    artifacts: [
-                        [artifactId: 'java-tomcat-sample',
-                         classifier: '',
-                         file: 'target/java-tomcat-maven-example.war',  // Corrected path
-                         type: 'war']
-                    ]
-                )
-            }
+    steps {
+        script {
+            def artifactVersion = "${env.BUILD_ID}-${env.BUILD_TIMESTAMP}".replaceAll(' ', '_')
         }
+
+        nexusArtifactUploader(
+            nexusVersion: 'nexus3',
+            protocol: 'http',
+            nexusUrl: '192.168.33.12:8081', 
+            groupId: 'devops',
+            version: artifactVersion,  
+            repository: 'devops-ta-java-application',
+            credentialsId: 'nexuslogin',
+            artifacts: [
+                [artifactId: 'java-tomcat-sample',
+                 classifier: '',
+                 file: 'target/java-tomcat-maven-example.war',  // Path to the artifact file
+                 type: 'war']
+            ]
+        )
+    }
+}
+
     }
 }
