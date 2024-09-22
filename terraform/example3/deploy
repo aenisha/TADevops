@@ -1,0 +1,8 @@
+#!/bin/bash
+
+cd /tmp/
+git clone https://github.com/srtimsina/devops-techaxis.git
+sudo apt update
+sudo apt install apache2 -y
+cp -r /tmp/devops-techaxis/* /var/www/html
+sudo systemctl restart apache2
